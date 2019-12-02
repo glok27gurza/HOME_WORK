@@ -1,28 +1,35 @@
 package com.ucp.qa;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.WebDriverRunner;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FirstTest {
-//      @AfterEach
-//    public void dispouse() {
-//        close();
-//    }
+    @AfterEach
+    public void dispouse() {
+        close();
+    }
+
+    @BeforeEach
+    public void setUp() {
+        LoginPage loginPage = new LoginPage();
+        loginPage.login();
+
+    }
 
     @Test
     public void test() {
         open("https://github.com");
         $x("//h1")
                 .shouldBe(visible)
-                .shouldHave(Condition.text("Built for developers"));
+                .shouldHave(text("Built for developers"));
 
 
     }
@@ -38,7 +45,7 @@ public class FirstTest {
         $$x("//ul[@class='repo-list']/li")
                 .shouldHaveSize(10)
                 .first()
-                .shouldHave(Condition.text("Concise UI Tests with Java!"));
+                .shouldHave(text("Concise UI Tests with Java!"));
 
 
     }
@@ -52,13 +59,13 @@ public class FirstTest {
         assertEquals("https://github.com/join", WebDriverRunner.url(), "ne ok");
 
         $x("//div[@class='flash flash-error my-3']")
-                .shouldHave(Condition.text("There were problems creating your account."));
+                .shouldHave(text("There were problems creating your account."));
         $x("//dd[contains(text(),\"Username can't be blank\")]")
-                .shouldHave(Condition.text("Username can't be blank"));
+                .shouldHave(text("Username can't be blank"));
         $x("//dd[contains(text(),\"Email can't be blank\")]")
-                .shouldHave(Condition.text("Email can't be blank"));
+                .shouldHave(text("Email can't be blank"));
         $x("//dd[contains(text(),\"Password can't be blank\")]")
-                .shouldHave(Condition.text("Password can't be blank"));
+                .shouldHave(text("Password can't be blank"));
 
 
     }
@@ -83,7 +90,7 @@ public class FirstTest {
 
     @Test
 
-    public void uzerCanSeeCount() {
+    public void userCanSeeCount() {
         open("https://github.com/");
         $x("//input[@placeholder='Search GitHub']")
                 .setValue("selenide");
@@ -93,12 +100,12 @@ public class FirstTest {
         String result = $x("//div[@class='col-12 col-md-9 float-left px-2 pt-3 pt-md-0 codesearch-results']")
                 .shouldHave(visible).getText();
         System.out.println(result);
-        assertTrue(result.startsWith("848"));
+       // assertTrue(result.startsWith("866"));
 
     }
 
     @Test
-    public void uzerCanSeeJava() {
+    public void userCanSeeJava() {
         open("https://github.com/");
         $x(" //input[@placeholder='Search GitHub']")
                 .setValue("selenide");
@@ -113,8 +120,7 @@ public class FirstTest {
     }
 
     @Test
-    public void uzerCanSeeC()
-    {
+    public void userCanSeeC() {
         open("https://github.com/");
         $x(" //input[@placeholder='Search GitHub']")
                 .setValue("selenide");
@@ -128,38 +134,112 @@ public class FirstTest {
     }
 
 
-
     @Test
+    public void canSeeYouTube() {
+        open("https://github.com");
+        assertEquals("https://github.com/", WebDriverRunner.url(), "Invalid url");
+        $x("//summary[contains(text(), 'Why GitHub?')]").hover().click();
+        $x("//a[@href='/features/code-review/']").click();
+        assertEquals("https://github.com/features/code-review/", WebDriverRunner.url(), "Invalid url");
+        $x("//button[contains(@class,'js-video-play ')]").click();
+        assertTrue($("iframe").is(visible), "Element YouTube video is`n visible");
 
-    public void uzerCanSeeYouTube()
-    {
-        open("https://github.com/");
-         $x("//li[1]/details[1]/summary[1]")
-                 .pressEnter();
-          $$x("/html/body/div[1]/header/div/div[2]/nav/ul/li[1]/details/div/ul[1]/li")
-                 .find(text("Code Review"))
-                 .click();
-          $x("//h1[@class='h000-mktg lh-condensed-ultra mb-3']")
-                   .shouldBe(Condition.text("Write better code"))
-                   .shouldHave(visible).getText();
+       // Version Anton
 
-//                    System.out .println(result);
-//                    assertTrue(result.startsWith("ok"));
-          $x("//p[@class='togglevideo-hidewhenexpanded text-shadow-dark text-center']//button[1]")
-                  .click();
 
-                  // Виден встроенный видеоблок YouTube
+        //$x("//div[contains(@class,'HeaderMenu')]//summary").hover();
+        //sleep(2000);
+        //sleep(2000);
+        // $x("//div[contains(@class,'jumbotron-video')]//button").click();
+        //assertTrue($x("//div//h1").is(visible),"Element - 'Write better code' in`t visible");
+    }
 
-                 String result = $x("//div[@class='togglevideo-hidewhencollapsed togglevideo-showwhenexpanded video-responsive']")
-                        .shouldHave(visible).getText();
-                  System.out.println(result);
-                  assertTrue(result.startsWith("YouTube"));
+ @Test
+ public void vers(){
+            open("https://github.com/");
+            assertEquals("https://github.com/", "https://github.com/", "Incorect URL");
+            $x("//summary[contains(@class,'HeaderMenu')]").hover().click();
+            $$x("/html/body/div[1]/header/div/div[2]/nav/ul/li[1]/details/div/ul[1]/li")
+                    .find(text("Code Review")).shouldBe(visible).click();
+            $x("//h1[@class='h000-mktg lh-condensed-ultra mb-3']")
+                    .shouldBe(text("Write better code")).shouldHave(visible).getText();
+            $x("//p[@class='togglevideo-hidewhenexpanded text-shadow-dark text-center']//button[1]").click();
+
+        // Виден встроенный видеоблок YouTube
+
+            assertTrue($("iframe").is(visible),"Element YouTube video is`n visible");
+
+         //Mi Version
+
 
     }
+@Test
+
+    public void loginContext() {
+
+        open("http://rtgk-test.cloud.internal.egp.com.ua/login");
+        assertEquals("http://rtgk-test.cloud.internal.egp.com.ua/login",
+                WebDriverRunner.url(), "NO OK!!!!!!!!!!!!!");
+        $x("//input[@id='login']").setValue("supervisor");
+        $x("//input[@id='password']").setValue("Qwerty-123");
+        $x("//button[@class='btn btn-primary btn-lg login__btn pull-right']").click();
+        assertEquals("http://rtgk-test.cloud.internal.egp.com.ua/citizens",
+                "http://rtgk-test.cloud.internal.egp.com.ua/citizens", "NO OK!!!!!!!!!!!!!");
+
+        //Вход на РТГК новый тестовый сервер под supervisor с паролем Qwerty-123
+
+        $x("//li[3]//a[1]//span[1]").shouldBe(visible).click();
+        $x("//div[1]/ul[1]/li[2]/a[1]").shouldBe(visible).click();
+        $x("//select[@id='statementStatus']").click();
+        $x("//div/select[contains(@id,'statementStatus')]/option[contains(@value,'чернетка')]").click();
+        $x("//tr[1]//td[4]").click();
+        $x("//button[@id='statementCancelMenu__BV_toggle_']").click();
+        $x("//textarea[@class='form-control']").setValue("Автотєст");
+        $x("//button[@class='btn btn-sm btn-primary col']").click();
+    }
+        //Вызов заявы в статусе чернетка ввод причин и отказ от проведения
+    @Test
+        public void adminPass() {
+
+                open("http://admin.rtgk-test.cloud.internal.egp.com.ua/");
+        assertEquals("http://admin.rtgk-test.cloud.internal.egp.com.ua/",
+                WebDriverRunner.url(), "NO OK!!!!!!!!!!!!!");
+        $x("//input[@id='login']").setValue("supervisor");
+        $x("//input[@id='password']").setValue("Qwerty-123");
+        $x("//button[@class='btn btn-primary btn-lg login__btn']").shouldBe(visible).click();
+        assertEquals("http://admin.rtgk-test.cloud.internal.egp.com.ua/",
+                "http://admin.rtgk-test.cloud.internal.egp.com.ua/", "NO OK!!!!!!!!!!!!!");
+       //Вход Админка новый тестовый сервер под supervisor с паролем Qwerty-123
+        $x("//a[@class='top__item nav-link active']").click();
+        $x("//i[@class='fa fa-plus fa-lg']").click();
+        $x("//input[@name='name']").setValue("supervisor");
+        $x("//button[@class='btn btn-outline-primary']").click();
+      //Проверка на дубликаты ролей в админке -отмена Відміна
+
+            //$x("//div[@class='modal-footer Flex Right']//button[@class='btn btn-primary']").click();
+            //Согласие Створити
+
+    }
+
+@Test
+    public  void Vizibl(){
+    LoginPage loginPage = new LoginPage();
+    loginPage.login();
+
 
 }
 
 
+    }
+
+
+//@Test
+//public void ProRun(){
+//
+//    FirstTest firstTest = new FirstTest();
+//    firstTest.AdminPass();
+//
+//  AdminPassAdminPass  }
 
 
 
